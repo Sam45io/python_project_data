@@ -36,7 +36,7 @@ plt.show()
 
 ### Results
 
-![Likelihood of Skills Requested in US Job Postings](3_project/images/top_3_role_us_job.png) 
+![Likelihood of Skills Requested in US Job Postings](images/bar_graph_top_3.png) 
 
 *Bar graph visualizing the salary for the top 3 data roles and their top 5 skills associated with each.*
 
@@ -50,26 +50,34 @@ plt.show()
 
 To find how skills are trending in 2023 for Data Analysts, I filtered data analyst positions and grouped the skills by the month of the job postings. This got me the top 5 skills of data analysts by month, showing how popular skills were throughout 2023.
 
-View my notebook with detailed steps here: [3_Skills_Trend](3_Skills_Trend.ipynb).
+View my notebook with detailed steps here:[3](3_project\3_skill_trend.ipynb) 
 
 ### Visualize Data
 
-```python
+``` python
+
+sns.lineplot(data=df_plot,dashes=False,palette="tab10")
+sns.set_theme(style="ticks")
+sns.despine()
+plt.title('Top 5 Skills Required for Data Analyst Role Over Months')
+plt.xlabel('Month Number')
+plt.ylabel('liklihood of Job Posts')
+plt.legend(title='Skills')
+plt.tight_layout()
+plt.legend().remove()
 
 from matplotlib.ticker import PercentFormatter
-
-df_plot = df_DA_US_percent.iloc[:, :5]
-sns.lineplot(data=df_plot, dashes=False, legend='full', palette='tab10')
-
-plt.gca().yaxis.set_major_formatter(PercentFormatter(decimals=0))
-
-plt.show()
+ax=plt.gca()
+ax.yaxis.set_major_formatter(PercentFormatter(decimals=0))
+for i in range(5):
+    plt.text(11.2,df_plot.iloc[-1,i],df_plot.columns[i])
+   
 
 ```
 
 ### Results
 
-![Trending Top Skills for Data Analysts in the US](images/Trending_Top_Skills_for_Data_Analysts_in_the_US.png)  
+![Trending Top Skills for Data Analysts in the US](images\skill_trend_months.png)  
 *Bar graph visualizing the trending top skills for data analysts in the US in 2023.*
 
 ### Insights:
@@ -81,7 +89,7 @@ plt.show()
 
 To identify the highest-paying roles and skills, I only got jobs in the United States and looked at their median salary. But first I looked at the salary distributions of common data jobs like Data Scientist, Data Engineer, and Data Analyst, to get an idea of which jobs are paid the most. 
 
-View my notebook with detailed steps here: [4_Salary_Analysis](4_Salary_Analysis.ipynb).
+View my notebook with detailed steps here: [4_Salary_Analysis](3_project\4_salary_analysis.ipynb).
 
 #### Visualize Data 
 
@@ -96,7 +104,7 @@ plt.show()
 
 #### Results
 
-![Salary Distributions of Data Jobs in the US](images/Salary_Distributions_of_Data_Jobs_in_the_US.png)  
+![Salary Distributions of Data Jobs in the US](images\job_salary_distribution_us.png)  
 *Box plot visualizing the salary distributions for the top 6 data job titles.*
 
 #### Insights
@@ -118,7 +126,7 @@ Next, I narrowed my analysis and focused only on data analyst roles. I looked at
 fig, ax = plt.subplots(2, 1)  
 
 # Top 10 Highest Paid Skills for Data Analysts
-sns.barplot(data=df_DA_top_pay, x='median', y=df_DA_top_pay.index, hue='median', ax=ax[0], palette='dark:b_r')
+sns.barplot(data=df_usa_toppay, x='median', y=df_usa_toppay.index, hue='median', ax=ax[0], palette='dark:b_r')
 
 # Top 10 Most In-Demand Skills for Data Analystsr')
 sns.barplot(data=df_DA_skills, x='median', y=df_DA_skills.index, hue='median', ax=ax[1], palette='light:b')
@@ -130,7 +138,7 @@ plt.show()
 #### Results
 Here's the breakdown of the highest-paid & most in-demand skills for data analysts in the US:
 
-![The Highest Paid & Most In-Demand Skills for Data Analysts in the US](images/Highest_Paid_and_Most_In_Demand_Skills_for_Data_Analysts_in_the_US.png)
+![The Highest Paid & Most In-Demand Skills for Data Analysts in the US](images\pay_vs_skill_graph.png)
 *Two separate bar graphs visualizing the highest paid skills and most in-demand skills for data analysts in the US.*
 
 #### Insights:
@@ -145,7 +153,7 @@ Here's the breakdown of the highest-paid & most in-demand skills for data analys
 
 To identify the most optimal skills to learn ( the ones that are the highest paid and highest in demand) I calculated the percent of skill demand and the median salary of these skills. To easily identify which are the most optimal skills to learn. 
 
-View my notebook with detailed steps here: [5_Optimal_Skills](5_Optimal_Skills.ipynb).
+View my notebook with detailed steps here: [5_Optimal_Skills](3_project\5_optimal_skills.ipynb).
 
 #### Visualize Data
 
@@ -160,7 +168,7 @@ plt.show()
 
 #### Results
 
-![Most Optimal Skills for Data Analysts in the US](images/Most_Optimal_Skills_for_Data_Analysts_in_the_US.png)    
+![Most Optimal Skills for Data Analysts in the US](images\optimal_skills.png)    
 *A scatter plot visualizing the most optimal skills (high paying & high demand) for data analysts in the US.*
 
 #### Insights:
@@ -170,41 +178,6 @@ plt.show()
 - More commonly required skills like `Excel` and `SQL` have a large presence in job listings but lower median salaries compared to specialized skills like `Python` and `Tableau`, which not only have higher salaries but are also moderately prevalent in job listings.
 
 - Skills such as `Python`, `Tableau`, and `SQL Server` are towards the higher end of the salary spectrum while also being fairly common in job listings, indicating that proficiency in these tools can lead to good opportunities in data analytics.
-
-### Visualizing Different Techonologies
-
-Let's visualize the different technologies as well in the graph. We'll add color labels based on the technology (e.g., {Programming: Python})
-
-#### Visualize Data
-
-```python
-from matplotlib.ticker import PercentFormatter
-
-# Create a scatter plot
-scatter = sns.scatterplot(
-    data=df_DA_skills_tech_high_demand,
-    x='skill_percent',
-    y='median_salary',
-    hue='technology',  # Color by technology
-    palette='bright',  # Use a bright palette for distinct colors
-    legend='full'  # Ensure the legend is shown
-)
-plt.show()
-
-```
-
-#### Results
-
-![Most Optimal Skills for Data Analysts in the US with Coloring by Technology](images/Most_Optimal_Skills_for_Data_Analysts_in_the_US_with_Coloring_by_Technology.png)  
-*A scatter plot visualizing the most optimal skills (high paying & high demand) for data analysts in the US with color labels for technology.*
-
-#### Insights:
-
-- The scatter plot shows that most of the `programming` skills (colored blue) tend to cluster at higher salary levels compared to other categories, indicating that programming expertise might offer greater salary benefits within the data analytics field.
-
-- The database skills (colored orange), such as Oracle and SQL Server, are associated with some of the highest salaries among data analyst tools. This indicates a significant demand and valuation for data management and manipulation expertise in the industry.
-
-- Analyst tools (colored green), including Tableau and Power BI, are prevalent in job postings and offer competitive salaries, showing that visualization and data analysis software are crucial for current data roles. This category not only has good salaries but is also versatile across different types of data tasks.
 
 # What I Learned
 
